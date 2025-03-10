@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>PC Builder - Калькулятор мощности</title>
+</head>
+<style>
+body {
+  font-family: sans-serif; /* Шрифт по умолчанию */
+  background-color: #222; /* Темный фон */
+  color: #eee; /* Светло-серый цвет текста */
+  margin: 0; /* Убираем отступы по умолчанию */
+}
+.calculator {
+  background-color: #333;
+  padding: 20px;
+  border-radius: 5px;
+  margin: 20px auto; /* Верхний и нижний отступ 20px, центрирование по горизонтали */
+  max-width: 1600px; /* Максимальная ширина калькулятора */
+  padding: 20px; /* Внутренний отступ */
+  box-sizing: border-box; /* padding входит в общую ширину */
+}
+
+.calculator__title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.calculator__form {
+  display: flex;
+  flex-direction: column; /* Элементы друг под другом */
+}
+
+.calculator__component {
+  margin-bottom: 10px;
+}
+
+.calculator__label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.calculator__input {
+  padding: 10px;
+  border: 1px solid #555;
+  background-color: #444;
+  color: #eee;
+  width: 100%;
+  box-sizing: border-box; /* Чтобы padding не увеличивал ширину */
+}
+
+.calculator__input--cpu {
+  background-color: #555; /* Например, темно-серый для CPU */
+}
+
+.calculator__input--gpu {
+  background-color: #666; /* Темнее для GPU */
+}
+
+
+.calculator__button {
+  background-color: #7CFC00;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.1em;
+  margin-top: 10px; /* Отступ сверху */
+}
+
+.calculator__result {
+  margin-top: 10px;
+  text-align: center;
+  font-weight: bold;
+}
+header {
+  background-color: #333; /* Чуть более темный фон для шапки */
+  padding: 20px; /* Отступы внутри шапки */
+  text-align: center; /* Выравнивание текста по центру */
+}
+
+.component {
+  margin-bottom: 10px; /* Отступ снизу для каждого компонента */
+}
+
+label {
+  display: block; /* Заставляет label занимать всю ширину */
+  margin-bottom: 5px; /* Отступ снизу от label */
+}
+
+select {
+  width: 100%; /* Занимает всю доступную ширину */
+  padding: 10px; /* Отступы внутри select */
+  background-color: #333; /* Темный фон для select */
+  color: #eee; /* Светло-серый цвет текста в select */
+  border: 1px solid #555; /* Тонкая серая рамка */
+}
+
+.buttons {
+  display: flex; /* Включаем Flexbox для кнопок */
+  justify-content: space-around; /* Равномерно распределяем кнопки, включая отступы по краям */
+  padding: 20px 0; /* Вертикальные отступы */
+}
+
+button {
+  background-color: #7CFC00; /* Зеленый фон кнопки */
+  color: #000; /* Черный цвет текста */
+  border: none; /* Убираем стандартную рамку */
+  padding: 10px 20px; /* Отступы внутри кнопки */
+  border-radius: 5px; /* Скругленные углы */
+  cursor: pointer; /* Меняем курсор на указатель */
+  font-size: 1.1em; /* Размер шрифта */
+  transition: background-color 0.3s ease; /* Плавный переход цвета при наведении */
+}
+
+.button-container {
+  display: flex;       /* Flexbox для контейнера кнопок */
+  justify-content: center; /* Выравнивание по центру по горизонтали */
+  align-items: center; /* Выравнивание по центру по вертикали */
+  margin-top: 20px;   /* Отступ сверху */
+  margin-bottom: 20px; /* Отступ снизу */
+  padding: 0 20px;   /* Отступы по бокам */
+}
+
+#powerResult {
+  margin-top: 10px;   /* Отступ сверху для результата */
+  font-weight: bold; /* Жирный шрифт для результата */
+  text-align: center; /* Результат по центру */
+}
+.spacer {
+  height: 40px; /* высота отступа */
+}
+
+.footer {
+  text-align: center;
+  padding: 10px;
+  background-color: #333;
+  color: #ccc;
+
+</style>
+<body>
+  <header>
+    <h1>PC Builder</h1>
+    <p>Configure your dream machine with our advanced power calculator and component selector</p>
+  </header>
+  <div class="buttons">
+    <button id="index">Проверка на совместимость</button>
+    <button id="readyBuilds">Готовые сборки</button>
+    <button id="componentInfo">Информация о комплектующих</button>
+  </div>
+  <main class="main">
+    <section class="calculator">
+      <h2 class="calculator__title">Калькулятор мощности</h2>
+      <form class="calculator__form" id="powerCalculator">
+        <div class="calculator__component">
+          <label class="calculator__label" for="cpu">CPU:</label>
+          <input class="calculator__input calculator__input--cpu" type="number" id="cpu" value="0">
+        </div>
+        <div class="calculator__component">
+          <label class="calculator__label" for="gpu">GPU:</label>
+          <input class="calculator__input calculator__input--gpu" type="number" id="gpu" value="0">
+        </div>
+        <!-- Добавьте остальные компоненты аналогично -->
+        <div class="calculator__component">
+          <label class="calculator__label" for="motherboard">Материнская плата:</label>
+          <input class="calculator__input calculator__input--motherboard" type="number" id="motherboard" value="0">
+        </div>
+        <div class="calculator__component">
+          <label class="calculator__label" for="ram">RAM:</label>
+          <input class="calculator__input calculator__input--ram" type="number" id="ram" value="0">
+        </div>
+        <div class="calculator__component">
+          <label class="calculator__label" for="storage">Накопители:</label>
+          <input class="calculator__input calculator__input--storage" type="number" id="storage" value="0">
+        </div>
+        <div class="calculator__component">
+          <label class="calculator__label" for="other">Прочее:</label>
+          <input class="calculator__input calculator__input--other" type="number" id="other" value="0">
+        </div>
+
+        <button class="calculator__button" type="button" onclick="calculatePower()">Рассчитать</button>
+        <p class="calculator__result">Общая мощность: <span id="totalPower">0</span> Вт</p>
+      </form>
+    </section>
+  </main>
+  <div class="spacer"></div>
+    <footer class="footer">
+        <p>&copy; 2025 PCBuilder</p>
+    </footer>
+  <script src="script.js">document.getElementById('checkCompatibility').addEventListener('click', function() {
+  let totalPower = 0;
+  const cpuPower = parseInt(document.getElementById('cpu').value);
+  const motherboardPower = parseInt(document.getElementById('motherboard').value);
+  const ramPower = parseInt(document.getElementById('ram').value);
+  const gpuPower = parseInt(document.getElementById('gpu').value);
+  const psuPower = parseInt(document.getElementById('psu').value);
+
+  totalPower = cpuPower + motherboardPower + ramPower + gpuPower + psuPower;
+
+  document.getElementById('powerResult').textContent = `Примерная потребляемая мощность: ${totalPower} Вт`;
+});
+  </script>
+</body>
+</html>
+
